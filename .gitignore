@@ -1,2 +1,3 @@
 #exclude all build folders
 build/
+libs/

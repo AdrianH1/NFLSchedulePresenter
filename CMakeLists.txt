@@ -4,6 +4,8 @@ project(NFLSchedulePresenter VERSION 0.1.0 LANGUAGES C CXX)
 include(CTest)
 enable_testing()
 
+include_directories("libs/asio-1.28.0/include")
+
 set(HEADERS
 
 )
