@@ -16,7 +16,11 @@ set(SOURCES
 
 add_executable(NFLSchedulePresenter ${HEADERS} ${SOURCES} )
 
-target_link_libraries(NFLSchedulePresenter wsock32 ws2_32)
+target_link_libraries(
+    NFLSchedulePresenter 
+    wsock32 
+    ws2_32
+)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
