@@ -8,7 +8,7 @@ include_directories("libs/asio-1.28.0/include")
 
 set(HEADERS
     CApiReader.hpp
-    )
+)
     
     set(SOURCES
     main.cpp

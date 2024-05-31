@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 
+//------------------------------------------------------------------
 CApiReader::CApiReader(const std::string& address, int port)
     : endpoint_(asio::ip::make_address(address, ec_), port),
     socket_(context_) {
@@ -24,6 +25,7 @@ CApiReader::CApiReader(const std::string& address, int port)
     }
 }
 
+//------------------------------------------------------------------
 void CApiReader::start() {
     if (socket_.is_open()) {
         grabSomeData();
@@ -52,6 +54,7 @@ void CApiReader::start() {
     if (thrContext_.joinable()) thrContext_.join();
 }
 
+//------------------------------------------------------------------
 void CApiReader::grabSomeData() {
     auto vBuffer = std::make_shared<std::vector<char>>(1024);
     socket_.async_read_some(asio::buffer(vBuffer->data(), vBuffer->size()),
@@ -64,6 +67,7 @@ void CApiReader::grabSomeData() {
     );
 }
 
+//------------------------------------------------------------------
 void CApiReader::handleRead(const std::vector<char>& vBuffer, std::size_t length) {
     std::string data(vBuffer.data(), length);
     static bool headerProcessed = false;
