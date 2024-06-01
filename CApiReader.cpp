@@ -9,49 +9,55 @@
 
 //------------------------------------------------------------------
 CApiReader::CApiReader(const std::string& address, int port)
-    : endpoint_(asio::ip::make_address(address, ec_), port),
-    socket_(context_) {
-    if (!ec_) {
-        socket_.connect(endpoint_, ec_);
-        if (!ec_) {
-            std::cout << "Connected" << std::endl;
-        }
-        else {
-            std::cout << "Not connected: " << ec_.message() << std::endl;
-        }
-    }
-    else {
-        std::cout << "Error in address: " << ec_.message() << std::endl;
+    : address_(address), port_(port), endpoint_(asio::ip::make_address(address, ec_), port),
+    socket_(context_) {}
+
+//------------------------------------------------------------------
+void CApiReader::start() {
+    if (!requests_.empty()) {
+        processNextRequest();
+        context_.run();
     }
 }
 
 //------------------------------------------------------------------
-void CApiReader::start() {
-    if (socket_.is_open()) {
-        grabSomeData();
+void CApiReader::addRequest(const std::string& url, const std::string& filename) {
+    requests_.emplace(url, filename);
+}
 
+//------------------------------------------------------------------
+void CApiReader::processNextRequest() {
+    if (requests_.empty()) {
+        return;
+    }
+
+    currentRequest_ = requests_.front();
+    requests_.pop();
+
+    vBuffer_Body_.clear();
+    headerProcessed_ = false;
+    headerBuffer_.clear();
+
+    // Ensure the socket is closed before starting a new request
+    if (socket_.is_open()) {
+        socket_.close();
+    }
+
+    socket_ = asio::ip::tcp::socket(context_);
+    socket_.connect(endpoint_, ec_);
+
+    if (!ec_) {
         std::string sRequest =
-            "GET /v2/sports/football/leagues/nfl/events HTTP/1.1\r\n"
+            "GET " + currentRequest_.first + " HTTP/1.1\r\n"
             "Host: sports.core.api.espn.com\r\n"
             "Connection: close\r\n\r\n";
 
         socket_.write_some(asio::buffer(sRequest.data(), sRequest.size()), ec_);
+        grabSomeData();
     }
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-
-    std::ofstream myfile("filename.json");
-    for (const auto& s : vBuffer_Body_) {
-        myfile << s;
+    else {
+        std::cout << "Failed to connect: " << ec_.message() << std::endl;
     }
-    myfile.close();
-
-    std::ifstream ifs("filename.json");
-    auto json_stream = nlohmann::json::parse(ifs);
-    std::cout << json_stream.at("$meta");
-
-    context_.stop();
-    if (thrContext_.joinable()) thrContext_.join();
 }
 
 //------------------------------------------------------------------
@@ -63,6 +69,15 @@ void CApiReader::grabSomeData() {
                 std::cout << "\n\nRead " << length << " bytes\n\n";
                 handleRead(*vBuffer, length);
             }
+            else if (ec == asio::error::eof) {
+                // Connection closed cleanly by peer
+                std::cout << "Connection closed by server.\n";
+                saveToFile();
+                processNextRequest();
+            }
+            else {
+                std::cout << "Error: " << ec.message() << std::endl;
+            }
         }
     );
 }
@@ -70,16 +85,15 @@ void CApiReader::grabSomeData() {
 //------------------------------------------------------------------
 void CApiReader::handleRead(const std::vector<char>& vBuffer, std::size_t length) {
     std::string data(vBuffer.data(), length);
-    static bool headerProcessed = false;
-    static std::string headerBuffer;
 
-    if (!headerProcessed) {
-        headerBuffer += data;
-        std::size_t headerEnd = headerBuffer.find("\r\n\r\n");
+    if (!headerProcessed_) {
+        headerBuffer_ += data;
+        std::size_t headerEnd = headerBuffer_.find("\r\n\r\n");
         if (headerEnd != std::string::npos) {
-            headerProcessed = true;
-            std::string body = headerBuffer.substr(headerEnd + 4);
+            headerProcessed_ = true;
+            std::string body = headerBuffer_.substr(headerEnd + 4);
             vBuffer_Body_.emplace_back(body);
+            headerBuffer_ = headerBuffer_.substr(0, headerEnd);
         }
     }
     else {
@@ -87,4 +101,17 @@ void CApiReader::handleRead(const std::vector<char>& vBuffer, std::size_t length
     }
 
     grabSomeData();
+}
+
+//------------------------------------------------------------------
+void CApiReader::saveToFile() {
+    std::ofstream myfile(currentRequest_.second);
+    for (const auto& s : vBuffer_Body_) {
+        myfile << s;
+    }
+    myfile.close();
+
+    std::ifstream ifs(currentRequest_.second);
+    auto json_stream = nlohmann::json::parse(ifs);
+    std::cout << json_stream.at("$meta") << std::endl;
 }
