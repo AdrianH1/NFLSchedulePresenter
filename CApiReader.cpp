@@ -6,6 +6,7 @@
 #include <thread>
 #include <vector>
 #include <string>
+#include <regex>
 
 //------------------------------------------------------------------
 CApiReader::CApiReader(const std::string& address, int port)
@@ -105,13 +106,29 @@ void CApiReader::handleRead(const std::vector<char>& vBuffer, std::size_t length
 
 //------------------------------------------------------------------
 void CApiReader::saveToFile() {
-    std::ofstream myfile(currentRequest_.second);
+    std::ofstream tempFile(currentRequest_.second);
     for (const auto& s : vBuffer_Body_) {
-        myfile << s;
+        tempFile << s;
     }
-    myfile.close();
+    tempFile.close();
 
+    // Load the file and extract the JSON content
     std::ifstream ifs(currentRequest_.second);
-    auto json_stream = nlohmann::json::parse(ifs);
-    std::cout << json_stream.at("$meta") << std::endl;
+    std::stringstream buffer;
+    buffer << ifs.rdbuf();
+    std::string fileContent = buffer.str();
+
+    std::ofstream finalFile(currentRequest_.second);
+    // Extract JSON using regex (assuming JSON starts with '{' and ends with '}')
+    std::regex jsonRegex(R"(\{.*\})");
+    std::smatch match;
+    if (std::regex_search(fileContent, match, jsonRegex)) {
+        std::string jsonString = match.str();
+        auto json_stream = nlohmann::json::parse(jsonString);
+        finalFile << json_stream;
+        std::cout << json_stream.at("$meta") << std::endl;
+    }
+    else {
+        std::cout << "No JSON content found in the response." << std::endl;
+    }
 }
