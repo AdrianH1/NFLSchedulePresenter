@@ -7,12 +7,15 @@ enable_testing()
 include_directories("libs/asio-1.28.0/include")
 
 set(HEADERS
-    CApiReader.hpp
-)
+    CApiDataReader.hpp
+    CHttpClient.hpp
+    )
     
     set(SOURCES
     main.cpp
-    CApiReader.cpp
+    CHttpClient.cpp
+    CApiDataReader.cpp
+    InternalDb.cpp
 )
 
 add_executable(NFLSchedulePresenter ${HEADERS} ${SOURCES} )

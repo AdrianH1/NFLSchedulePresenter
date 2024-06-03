@@ -1,4 +1,4 @@
-#include "CApiReader.hpp"
+#include "CHttpClient.hpp"
 #include "libs/nlohmann/json.hpp"
 #include <asio.hpp>
 #include <iostream>
@@ -9,12 +9,12 @@
 #include <regex>
 
 //------------------------------------------------------------------
-CApiReader::CApiReader(const std::string& address, int port)
+CHttpClient::CHttpClient(const std::string& address, int port)
     : address_(address), port_(port), endpoint_(asio::ip::make_address(address, ec_), port),
     socket_(context_) {}
 
 //------------------------------------------------------------------
-void CApiReader::start() {
+void CHttpClient::start() {
     if (!requests_.empty()) {
         processNextRequest();
         context_.run();
@@ -22,12 +22,12 @@ void CApiReader::start() {
 }
 
 //------------------------------------------------------------------
-void CApiReader::addRequest(const std::string& url, const std::string& filename) {
+void CHttpClient::addRequest(const std::string& url, const std::string& filename) {
     requests_.emplace(url, filename);
 }
 
 //------------------------------------------------------------------
-void CApiReader::processNextRequest() {
+void CHttpClient::processNextRequest() {
     if (requests_.empty()) {
         return;
     }
@@ -62,7 +62,7 @@ void CApiReader::processNextRequest() {
 }
 
 //------------------------------------------------------------------
-void CApiReader::grabSomeData() {
+void CHttpClient::grabSomeData() {
     auto vBuffer = std::make_shared<std::vector<char>>(1024);
     socket_.async_read_some(asio::buffer(vBuffer->data(), vBuffer->size()),
         [this, vBuffer](std::error_code ec, std::size_t length) {
@@ -84,7 +84,7 @@ void CApiReader::grabSomeData() {
 }
 
 //------------------------------------------------------------------
-void CApiReader::handleRead(const std::vector<char>& vBuffer, std::size_t length) {
+void CHttpClient::handleRead(const std::vector<char>& vBuffer, std::size_t length) {
     std::string data(vBuffer.data(), length);
 
     if (!headerProcessed_) {
@@ -105,7 +105,7 @@ void CApiReader::handleRead(const std::vector<char>& vBuffer, std::size_t length
 }
 
 //------------------------------------------------------------------
-void CApiReader::saveToFile() {
+void CHttpClient::saveToFile() {
     std::ofstream tempFile(currentRequest_.second);
     for (const auto& s : vBuffer_Body_) {
         tempFile << s;

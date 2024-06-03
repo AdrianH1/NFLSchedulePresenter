@@ -7,10 +7,10 @@
 #define ASIO_STANDALONE
 #include <asio.hpp>
 
-class CApiReader
+class CHttpClient
 {
 public:
-    CApiReader(const std::string& address, int port);
+    CHttpClient(const std::string& address, int port);
     void start();
     void addRequest(const std::string& url, const std::string& filename);
 
