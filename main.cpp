@@ -8,6 +8,7 @@ int main(int argc, char const* argv[]) {
     auto apiReader = std::make_unique<CApiDataReader>();
     // apiReader->getAllRegularSeasonEvents();
     apiReader->extractEventsFromWeeks();
+    apiReader->getRegularSeasonEventDetails();
 
     // CHttpClient gameReader("54.71.61.211", 80);
     // gameReader.start();

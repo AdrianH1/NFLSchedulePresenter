@@ -8,7 +8,7 @@
 //------------------------------------------------------------------
 void CApiDataReader::getAllRegularSeasonEvents()
 {
-    CHttpClient httpClient("54.71.61.211", 80);
+    CHttpClient httpClient(KeyValues::getApiServerIp(), 80);
 
     httpClient.addRequest(ApiUrl::getWeekOverview("1"), JsonFilePath::getWeekOverview("1"));
     httpClient.addRequest(ApiUrl::getWeekOverview("2"), JsonFilePath::getWeekOverview("2"));
@@ -35,7 +35,7 @@ void CApiDataReader::getAllRegularSeasonEvents()
 //------------------------------------------------------------------
 void CApiDataReader::extractEventsFromWeeks()
 {
-    for (int i = 1; i <= 18; i++)
+    for (int i = 1; i <= 1; i++)
     {
         std::ifstream ifs(JsonFilePath::getWeekOverview(std::to_string(i)));
         auto json_stream = nlohmann::json::parse(ifs);
@@ -49,6 +49,26 @@ void CApiDataReader::extractEventsFromWeeks()
             eventsPerWeek.emplace_back(it.value().at("$ref"));
         }
 
-        m_eventsPerWeek.try_emplace(KeyValues::getWeekOverview(std::to_string(i)), eventsPerWeek);
+        m_mapEventsPerWeek.try_emplace(KeyValues::getWeekOverview(std::to_string(i)), eventsPerWeek);
     }
+}
+
+//------------------------------------------------------------------
+void CApiDataReader::getRegularSeasonEventDetails()
+{
+    CHttpClient httpClient(KeyValues::getApiServerIp(), 80);
+
+    for (const auto& [key, value] : m_mapEventsPerWeek)
+    {
+        int num = 1;
+        for (const auto& url : value)
+        {
+            std::cout << JsonFilePath::getWeekDetail(key, num) << std::endl;
+            std::cout << url << std::endl;
+            httpClient.addRequest(url, JsonFilePath::getWeekDetail(key, num));
+            ++num;
+        }
+    }
+
+    httpClient.start();
 }

@@ -118,15 +118,18 @@ void CHttpClient::saveToFile() {
     buffer << ifs.rdbuf();
     std::string fileContent = buffer.str();
 
+
     std::ofstream finalFile(currentRequest_.second);
     // Extract JSON using regex (assuming JSON starts with '{' and ends with '}')
     std::regex jsonRegex(R"(\{.*\})");
     std::smatch match;
+    std::cout << "before if\n" << fileContent << std::endl;
     if (std::regex_search(fileContent, match, jsonRegex)) {
         std::string jsonString = match.str();
+        std::cout << "start" << jsonString << std::endl;
         auto json_stream = nlohmann::json::parse(jsonString);
         finalFile << json_stream;
-        std::cout << json_stream.at("$meta") << std::endl;
+        // std::cout << json_stream.at("$meta") << std::endl;
     }
     else {
         std::cout << "No JSON content found in the response." << std::endl;

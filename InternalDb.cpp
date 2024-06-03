@@ -16,12 +16,22 @@ public:
     {
         return "..\\apiData\\week" + week + "_events.json";
     }
+
+    static const std::string getWeekDetail(const std::string& week, int num)
+    {
+        return "..\\apiData\\" + week + "\\event_" + std::to_string(num) + ".json";
+    }
 };
 
 struct KeyValues
 {
     static const std::string getWeekOverview(const std::string& week)
     {
-        return "week " + week;
+        return "week" + week;
+    }
+
+    static const std::string getApiServerIp()
+    {
+        return "54.71.61.211";
     }
 };

@@ -12,5 +12,5 @@ public:
     void getRegularSeasonEventDetails();
 
 private:
-    std::unordered_map<std::string, std::vector<std::string>> m_eventsPerWeek{};
+    std::unordered_map<std::string, std::vector<std::string>> m_mapEventsPerWeek{};
 };
