@@ -8,7 +8,7 @@ class CApiDataReader
 {
 public:
     void getAllRegularSeasonEvents();
-    void extractEventsFromWeeks();
+    void extractEventsFromWeeks(int weekNum);
     void getRegularSeasonEventDetails();
 
 private:

@@ -19,7 +19,7 @@ public:
 
     static const std::string getWeekDetail(const std::string& week, int num)
     {
-        return "..\\apiData\\" + week + "\\event_" + std::to_string(num) + ".json";
+        return "..\\apiData\\" + week + "\\eventDetails_" + std::to_string(num) + ".json";
     }
 };
 

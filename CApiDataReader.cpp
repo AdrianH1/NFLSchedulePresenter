@@ -33,24 +33,21 @@ void CApiDataReader::getAllRegularSeasonEvents()
 }
 
 //------------------------------------------------------------------
-void CApiDataReader::extractEventsFromWeeks()
+void CApiDataReader::extractEventsFromWeeks(int weekNum)
 {
-    for (int i = 1; i <= 1; i++)
+    std::ifstream ifs(JsonFilePath::getWeekOverview(std::to_string(weekNum)));
+    auto json_stream = nlohmann::json::parse(ifs);
+
+    std::cout << json_stream.at("$meta") << std::endl;
+
+    std::vector<std::string> eventsPerWeek{};
+    auto data = json_stream.at("items");
+    for (auto it = data.begin(); it != data.end(); ++it)
     {
-        std::ifstream ifs(JsonFilePath::getWeekOverview(std::to_string(i)));
-        auto json_stream = nlohmann::json::parse(ifs);
-
-        std::cout << json_stream.at("$meta") << std::endl;
-
-        std::vector<std::string> eventsPerWeek{};
-        auto data = json_stream.at("items");
-        for (auto it = data.begin(); it != data.end(); ++it)
-        {
-            eventsPerWeek.emplace_back(it.value().at("$ref"));
-        }
-
-        m_mapEventsPerWeek.try_emplace(KeyValues::getWeekOverview(std::to_string(i)), eventsPerWeek);
+        eventsPerWeek.emplace_back(it.value().at("$ref"));
     }
+
+    m_mapEventsPerWeek.try_emplace(KeyValues::getWeekOverview(std::to_string(weekNum)), eventsPerWeek);
 }
 
 //------------------------------------------------------------------
