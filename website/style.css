@@ -1,0 +1,153 @@
+/*------------------------------------*\
+    MAIN
+\*------------------------------------*/
+
+*,
+*:after,
+*:before {
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-font-smoothing: antialiased;
+	font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+body {
+	margin: 0px;
+	font: 300 11px/1.4 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	color: #444;
+	background: repeating-linear-gradient(-40deg, #171717, #171717 30px, #1F1F1F 30px, #1F1F1F 60px);
+}
+
+img {
+	max-width: 100%;
+}
+
+a {
+	color: #444;
+	text-decoration: none;
+}
+
+a:focus {
+	outline: 0;
+}
+
+a:hover,
+a:active {
+	outline: 0;
+}
+
+input:focus {
+	outline: 0;
+}
+
+#div_main {
+	margin: auto;
+	width: 100%;
+	height: auto;
+}
+
+
+/*------------------------------------*\
+    HEADER
+\*------------------------------------*/
+
+#div_wrapper_header {
+	margin: auto;
+	width: 100%;
+	height: auto;
+	background: #100e17;
+}
+
+#div_header {
+	margin: auto;
+	width: 80%;
+	max-width: 1024px;
+	height: auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#div_logo {
+	display: flex;
+}
+
+#img_logo {
+	height: 200px;
+}
+
+
+/*------------------------------------*\
+    NAVIGATION
+\*------------------------------------*/
+
+#div_nav {
+	width: 100%;
+}
+
+ul#ul_nav {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.li_nav {
+	border-bottom: 2px solid #201c29;
+}
+
+.li_nav:last-child {
+	border-bottom: none;
+}
+
+.li_nav a:hover {
+	background: #201c29;
+}
+
+.a_nav {
+	display: block;
+	padding: 10px;
+	font: normal 22px Tahoma, Verdana, Arial;
+	color: #fff;
+	text-align: center;
+	text-decoration: none;
+}
+
+/*------------------------------------*\
+    HOME
+\*------------------------------------*/
+
+#div_container_wrapper {
+	margin: auto;
+	width: 80%;
+	overflow: auto;
+	position: relative;
+	background-color: #100e17;
+	max-width: 1280px;
+}
+
+#div_container {
+	width: 100%;
+	overflow: auto;
+}
+
+#div_sidebar_wrapper {
+	height: auto;
+	width: 30%;
+	float: left;
+	overflow: hidden;
+	padding: 20px;
+	max-width: 384px;
+}
+
+#div_content_wrapper {
+	height: auto;
+	width: 70%;
+	float: right;
+	overflow: hidden;
+	border-left: 2px solid #201c29;
+	max-width: 896px;
+	padding: 20px 20px 0px 18px;
+}
+
+#div_content {}
