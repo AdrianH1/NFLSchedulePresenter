@@ -1,7 +1,7 @@
 #include "CApiDataReader.hpp"
 #include "CHttpClient.hpp"
-#include "InternalDB.cpp"
 #include "libs/nlohmann/json.hpp"
+#include "InternalDb.hpp"
 #include <fstream>
 #include <iostream>
 
