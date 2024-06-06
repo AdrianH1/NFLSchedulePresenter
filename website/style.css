@@ -114,6 +114,34 @@ ul#ul_nav {
 }
 
 /*------------------------------------*\
+    GAME TABLE
+\*------------------------------------*/
+
+#div_game {
+	width: 100%;
+}
+
+ul#ul_game {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.li_game {
+	border-right: 2px solid #201c29;
+	display: inline-block;
+	padding: 10px;
+	font: normal 22px Tahoma, Verdana, Arial;
+	color: #fff;
+	text-align: center;
+	text-decoration: none;
+}
+
+.li_game:last-child {
+	border-right: none;
+}
+
+/*------------------------------------*\
     HOME
 \*------------------------------------*/
 
