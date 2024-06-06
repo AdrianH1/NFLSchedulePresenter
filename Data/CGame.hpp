@@ -9,5 +9,5 @@ struct CGame
     std::string     m_guestTeam{};
     std::string     m_date{};
     WatchOption     m_watchOption{ WatchOption::NOTSET };
-    bool            m_seeen{ false };
+    bool            m_seen{ false };
 };
