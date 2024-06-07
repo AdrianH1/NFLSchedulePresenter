@@ -93,7 +93,7 @@ ul#ul_nav {
 }
 
 .li_nav {
-	border-bottom: 2px solid #201c29;
+	border-bottom: 2px solid #d50a0a;
 }
 
 .li_nav:last-child {
@@ -125,20 +125,55 @@ ul#ul_game {
 	list-style-type: none;
 	margin: 0px;
 	padding: 0px;
+	width: 100%;
+	border-bottom: 2px solid #013369;
+}
+
+ul#ul_game:last-child {
+	border-bottom: none;
 }
 
 .li_game {
-	border-right: 2px solid #201c29;
+	border-right: 2px solid #013369;
 	display: inline-block;
-	padding: 10px;
-	font: normal 22px Tahoma, Verdana, Arial;
+	padding: 5px;
+	font: normal 20px Tahoma, Verdana, Arial;
 	color: #fff;
 	text-align: center;
 	text-decoration: none;
+	vertical-align: middle;
+}
+
+.li_game#time {
+	width: 10%
+}
+
+.li_game#team {
+	width: 28%
+}
+
+.li_game#logo {
+	width: 5%
+}
+
+.li_game#at {
+	width: 5%
+}
+
+.li_game#watch {
+	width: 11%
+}
+
+.li_game#seen {
+	width: 5%
 }
 
 .li_game:last-child {
 	border-right: none;
+}
+
+#img_team {
+	height: 30px;
 }
 
 /*------------------------------------*\
@@ -161,20 +196,18 @@ ul#ul_game {
 
 #div_sidebar_wrapper {
 	height: auto;
-	width: 30%;
+	width: 15%;
 	float: left;
 	overflow: hidden;
 	padding: 20px;
-	max-width: 384px;
 }
 
 #div_content_wrapper {
 	height: auto;
-	width: 70%;
+	width: 85%;
 	float: right;
 	overflow: hidden;
 	border-left: 2px solid #201c29;
-	max-width: 896px;
 	padding: 20px 20px 0px 18px;
 }
 
