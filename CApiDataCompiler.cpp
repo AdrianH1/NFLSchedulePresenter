@@ -28,7 +28,7 @@ tGamesPerWeekMap collectFiles()
 }
 }
 //------------------------------------------------------------------
-void CApiDataCompiler::compileApiData()
+tWeekVec CApiDataCompiler::compileApiData()
 {
     using json = nlohmann::json;
 
@@ -55,6 +55,7 @@ void CApiDataCompiler::compileApiData()
         m_allData.emplace_back(saveApiWeekData(key, games));
         games.clear();
     }
+    return m_allData;
 }
 
 //------------------------------------------------------------------

@@ -12,7 +12,7 @@ using tGameVec = std::vector<CGame>;
 class CApiDataCompiler
 {
 public:
-    void compileApiData();
+    tWeekVec compileApiData();
 private:
     CGame saveApiGameData(nlohmann::json& json_stream);
     CWeek saveApiWeekData(const std::string& weekName, tGameVec& games);
