@@ -10,5 +10,5 @@ class CSiteContentFactory
 public:
     std::string createGameList(const CGame& game);
     std::vector<std::string> createWeekList(const CWeek& week);
-    void saveSiteContent();
+    void saveSiteContent(std::vector<CWeek>& data);
 };

@@ -92,7 +92,7 @@ std::vector<std::string> CSiteContentFactory::createWeekList(const CWeek & week)
 }
 
 //------------------------------------------------------------------
-void CSiteContentFactory::saveSiteContent()
+void CSiteContentFactory::saveSiteContent(std::vector<CWeek>& data)
 {
     std::ifstream ifs(filePath);
 
@@ -101,23 +101,49 @@ void CSiteContentFactory::saveSiteContent()
         return;
     }
 
+    // Read the entire file into a vector of strings
+    std::vector<std::string> lines;
     std::string line;
-    std::string keyword = "week2";
-    int lineNumber = 0;
-    bool found = false;
-
-    // Loop through each line in the file
     while (std::getline(ifs, line)) {
-        lineNumber++;
-        // Find the keyword in the current line
-        if (line.find(keyword) != std::string::npos) {
-            std::cout << "Found '" << keyword << "' on line " << lineNumber << ": " << line << std::endl;
-            found = true;
-            break; // Stop after finding the first occurrence
+        lines.push_back(line);
+    }
+    ifs.close(); // Close the file after reading
+
+    for (const auto& week : data)
+    {
+        std::string keyword = week.m_name;
+        bool found = false;
+
+        // Iterate through the lines to find and replace the keyword
+        for (auto& file_line : lines) {
+            if (file_line.find(keyword) != std::string::npos) {
+                std::cout << "Found '" << keyword << "' on line: " << file_line << std::endl;
+
+                while (file_line.find("content") != std::string::npos)
+                {
+                    file_line.replace(file_line.find("content"), 7, "good");
+                }
+
+                found = true;
+                break; // Stop after finding the first occurrence
+            }
+        }
+
+        if (!found) {
+            std::cout << "'" << keyword << "' not found in the file" << std::endl;
         }
     }
 
-    if (!found) {
-        std::cout << "'" << keyword << "' not found in the file" << std::endl;
+    // Write the modified content back to the file
+    std::ofstream ofs(filePath);
+    if (!ofs) {
+        std::cerr << "Failed to open the file for writing." << std::endl;
+        return;
     }
+
+    for (const auto& file_line : lines) {
+        ofs << file_line << std::endl;
+    }
+    ofs.close(); // Close the file after writing
+
 }

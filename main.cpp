@@ -29,7 +29,7 @@ int main(int argc, char const* argv[]) {
     auto contentFactory = std::make_unique<CSiteContentFactory>();
     auto list = contentFactory->createGameList(data.at(0).m_gamesPerWeek.at(0));
     std::cout << list << std::endl;
-    contentFactory->saveSiteContent();
+    contentFactory->saveSiteContent(data);
 
     std::cout << "\nend";
     return 0;
