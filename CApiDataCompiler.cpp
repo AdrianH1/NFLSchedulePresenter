@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <ctime>
 #include <unordered_map>
 #include "CApiDataCompiler.hpp"
 #include "InternalDb.hpp"
@@ -67,11 +69,43 @@ CWeek CApiDataCompiler::saveApiWeekData(const std::string& weekName, tGameVec& g
     return week;
 }
 
+namespace
+{
+void separateDate(std::string& fullDate, CGame& game)
+{
+    auto date = fullDate.substr(0, 10);
+    auto time = fullDate.substr(11, 16);
+
+    std::tm tm{};
+    std::istringstream ss(date + time);
+    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M");
+
+    std::ostringstream timeStream;
+    timeStream << std::put_time(&tm, "%H:%M");
+    time = timeStream.str();
+
+    std::ostringstream dateStream;
+    dateStream << std::put_time(&tm, "%d.%m.%Y");
+    date = dateStream.str();
+
+    // Extract the day of the week
+    char dayBuffer[10];
+    std::strftime(dayBuffer, sizeof(dayBuffer), "%A", &tm);
+    std::string dayOfWeek(dayBuffer);
+
+    game.m_date = date;
+    game.m_time = time;
+    game.m_day = dayOfWeek;
+}
+}
+
 //------------------------------------------------------------------
 CGame CApiDataCompiler::saveApiGameData(nlohmann::json& json_stream)
 {
     CGame game;
-    game.m_date = json_stream.at("date");
+    game.m_gameId = json_stream.at("id");
+    std::string date = json_stream.at("date");
+    separateDate(date, game);
 
     std::string teams = json_stream.at("name");
     std::string delimiter = " at ";
