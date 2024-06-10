@@ -54,7 +54,7 @@ tWeekVec CApiDataCompiler::compileApiData()
                 std::cerr << e.what() << '\n';
             }
         }
-        m_allData.emplace_back(saveApiWeekData(key, games));
+        m_allData.try_emplace(key, saveApiWeekData(key, games));
         games.clear();
     }
     return m_allData;

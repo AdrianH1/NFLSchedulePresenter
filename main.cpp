@@ -27,8 +27,8 @@ int main(int argc, char const* argv[]) {
     //---CREATE SITE CONTENT------------------------------
     //----------------------------------------------------
     auto contentFactory = std::make_unique<CSiteContentFactory>();
-    auto list = contentFactory->createGameList(data.at(0).m_gamesPerWeek.at(0));
-    std::cout << list << std::endl;
+    // auto list = contentFactory->createGameList(data.at(0).m_gamesPerWeek.at(0));
+    // std::cout << list << std::endl;
     contentFactory->saveSiteContent(data);
 
     std::cout << "\nend";

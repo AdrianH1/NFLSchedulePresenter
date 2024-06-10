@@ -81,7 +81,7 @@ std::string CSiteContentFactory::createGameList(const CGame & game)
 }
 
 //------------------------------------------------------------------
-std::vector<std::string> CSiteContentFactory::createWeekList(const CWeek & week)
+std::vector<std::string> CSiteContentFactory::createWeekList(CWeek & week)
 {
     std::vector<std::string> gameList{};
     for (const auto& game : week.m_gamesPerWeek)
@@ -92,7 +92,7 @@ std::vector<std::string> CSiteContentFactory::createWeekList(const CWeek & week)
 }
 
 //------------------------------------------------------------------
-void CSiteContentFactory::saveSiteContent(std::vector<CWeek>& data)
+void CSiteContentFactory::saveSiteContent(std::unordered_map<std::string, CWeek>& data)
 {
     std::ifstream ifs(filePath);
 
@@ -109,9 +109,9 @@ void CSiteContentFactory::saveSiteContent(std::vector<CWeek>& data)
     }
     ifs.close(); // Close the file after reading
 
-    for (const auto& week : data)
+    for (const auto& [key, value] : data)
     {
-        std::string keyword = week.m_name;
+        std::string keyword = value.m_name;
         bool found = false;
 
         // Iterate through the lines to find and replace the keyword
@@ -121,7 +121,12 @@ void CSiteContentFactory::saveSiteContent(std::vector<CWeek>& data)
 
                 while (file_line.find("content") != std::string::npos)
                 {
-                    file_line.replace(file_line.find("content"), 7, "good");
+                    std::string fullWeekHtmlString{};
+                    for (const auto& s : createWeekList(data.at(key)))
+                    {
+                        fullWeekHtmlString += s;
+                    }
+                    file_line.replace(file_line.find("content"), 7, fullWeekHtmlString);
                 }
 
                 found = true;

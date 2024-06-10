@@ -6,7 +6,7 @@
 #include "libs/nlohmann/json.hpp"
 
 using tGamesPerWeekMap = std::unordered_map<std::string, std::vector<std::string>>;
-using tWeekVec = std::vector<CWeek>;
+using tWeekVec = std::unordered_map<std::string, CWeek>;
 using tGameVec = std::vector<CGame>;
 
 class CApiDataCompiler
