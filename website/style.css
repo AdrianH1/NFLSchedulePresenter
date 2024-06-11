@@ -8,7 +8,6 @@
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	-webkit-font-smoothing: antialiased;
-	font-smoothing: antialiased;
 	text-rendering: optimizeLegibility;
 }
 
@@ -176,6 +175,19 @@ ul#ul_game:last-child {
 	height: 30px;
 }
 
+h1#site_title {
+	font: normal 30px Tahoma, Verdana, Arial;
+	color: #fff;
+	margin-left: 10px;
+	text-decoration-line: underline;
+}
+
+h1#day_title {
+	font: normal 20px Tahoma, Verdana, Arial;
+	color: #fff;
+	margin-left: 10px;
+}
+
 /*------------------------------------*\
     HOME
 \*------------------------------------*/
@@ -210,5 +222,3 @@ ul#ul_game:last-child {
 	border-left: 2px solid #201c29;
 	padding: 20px 20px 0px 18px;
 }
-
-#div_content {}
