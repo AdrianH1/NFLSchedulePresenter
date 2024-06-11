@@ -60,12 +60,12 @@ input:focus {
 
 #div_header {
 	margin: auto;
-	width: 80%;
-	max-width: 1024px;
+	width: 100%;
 	height: auto;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	border-bottom: 2px solid #201c29;
 }
 
 #div_logo {
