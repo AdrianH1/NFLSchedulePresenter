@@ -69,13 +69,15 @@ std::string CSiteContentFactory::createGameList(const CGame & game)
     result += createLiGame("team", game.m_homeTeam);
 
     // <li class="li_game" id="watch">Full</li>
-    result += createLiGame("watch", "Full");
+    result += createLiGame("watch", "-");
 
     // <li class="li_game" id="seen">yes</li>
     result += createLiGame("seen", "no");
 
     result += UL_GAME_CLOSE;
     // </ul>
+
+    result += "\n";
 
     return result;
 }
@@ -129,7 +131,6 @@ void CSiteContentFactory::saveSiteContent(std::unordered_map<std::string, CWeek>
                 {
                     std::string fullWeekHtmlString{};
                     auto title = "Week " + key.substr(4, key.size());
-                    std::to_string(key.at(key.size() - 1));
                     fullWeekHtmlString += "<h1 id=\"site_title\">" + title + "</h1>";
                     for (const auto& s : createWeekList(data.at(key)))
                     {

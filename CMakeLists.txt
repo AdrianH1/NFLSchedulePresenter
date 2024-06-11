@@ -10,6 +10,7 @@ set(HEADERS
     CApiDataCompiler.hpp
     CApiDataReader.hpp
     CSiteContentFactory.hpp
+    CSiteContentUpdater.hpp
     CHttpClient.hpp
     Data/CGame.hpp
     Data/CWeek.hpp
@@ -19,6 +20,7 @@ set(HEADERS
     CApiDataCompiler.cpp
     CApiDataReader.cpp
     CSiteContentFactory.cpp
+    CSiteContentUpdater.cpp
     CHttpClient.cpp
     InternalDb.hpp
     main.cpp
