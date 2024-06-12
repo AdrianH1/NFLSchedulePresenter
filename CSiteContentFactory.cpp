@@ -91,7 +91,7 @@ std::vector<std::string> CSiteContentFactory::createWeekList(CWeek & week)
     {
         if (game.m_day.compare(day))
         {
-            gameList.push_back("<h1 id=\"day_title\">" + game.m_day + "</h1>");
+            gameList.push_back("<h1 id=\"day_title\">" + game.m_day + "</h1>\n");
             day = game.m_day;
         }
         gameList.push_back(createGameList(game));
@@ -131,7 +131,7 @@ void CSiteContentFactory::saveSiteContent(std::unordered_map<std::string, CWeek>
                 {
                     std::string fullWeekHtmlString{};
                     auto title = "Week " + key.substr(4, key.size());
-                    fullWeekHtmlString += "<h1 id=\"site_title\">" + title + "</h1>";
+                    fullWeekHtmlString += "\n<h1 id=\"site_title\">" + title + "</h1>";
                     for (const auto& s : createWeekList(data.at(key)))
                     {
                         fullWeekHtmlString += s;

@@ -5,6 +5,8 @@
 class CSiteContentUpdater
 {
 public:
-    void updateWatchOption(const std::string& gameId, const std::string& line, const std::string& newWatchOption);
-    void updateSeen(const std::string& gameId);
+    std::string searchLine(const std::string & gameId, const std::string& newWatchOption, const std::string& newSeenOption);
+private:
+    std::string updateWatchOption(const std::string& gameId, const std::string& line, const std::string& newWatchOption);
+    std::string updateSeen(const std::string& gameId, const std::string& line, const std::string& newSeenOption);
 };
