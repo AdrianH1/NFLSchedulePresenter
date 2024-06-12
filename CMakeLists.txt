@@ -9,6 +9,7 @@ include_directories("libs/asio-1.28.0/include")
 set(HEADERS
     CApiDataCompiler.hpp
     CApiDataReader.hpp
+    CInputValidator.hpp
     CSiteContentFactory.hpp
     CSiteContentUpdater.hpp
     CHttpClient.hpp
@@ -19,6 +20,7 @@ set(HEADERS
     set(SOURCES
     CApiDataCompiler.cpp
     CApiDataReader.cpp
+    CInputValidator.cpp
     CSiteContentFactory.cpp
     CSiteContentUpdater.cpp
     CHttpClient.cpp

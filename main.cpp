@@ -33,8 +33,13 @@ int main(int argc, char const* argv[]) {
     //----------------------------------------------------
     //---UPDATE SITE CONTENT------------------------------
     //----------------------------------------------------
-    auto contentUpdater = std::make_unique<CSiteContentUpdater>();
-    contentUpdater->searchLine("401671866", "-", "no");
+    // auto contentUpdater = std::make_unique<CSiteContentUpdater>();
+    // contentUpdater->searchLine("401671866", "-", "no");
+
+    //----------------------------------------------------
+    //---CMD line UI--------------------------------------
+    //----------------------------------------------------
+
 
     std::cout << "\nend";
     return 0;
