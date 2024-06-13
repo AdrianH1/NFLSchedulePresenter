@@ -1,5 +1,6 @@
 #include "CApiDataCompiler.hpp"
 #include "CApiDataReader.hpp"
+#include "CInputValidator.hpp"
 #include "CSiteContentFactory.hpp"
 #include "CSiteContentUpdater.hpp"
 #include "libs/nlohmann/json.hpp"
@@ -21,8 +22,8 @@ int main(int argc, char const* argv[]) {
     //----------------------------------------------------
     //---COMPILE API DATA---------------------------------
     //----------------------------------------------------
-    // auto apiCompiler = std::make_unique <CApiDataCompiler>();
-    // auto data = apiCompiler->compileApiData();
+    auto apiCompiler = std::make_unique<CApiDataCompiler>();
+    auto data = apiCompiler->compileApiData();
 
     //----------------------------------------------------
     //---CREATE SITE CONTENT------------------------------
@@ -30,16 +31,31 @@ int main(int argc, char const* argv[]) {
     // auto contentFactory = std::make_unique<CSiteContentFactory>();
     // contentFactory->saveSiteContent(data);
 
-    //----------------------------------------------------
-    //---UPDATE SITE CONTENT------------------------------
-    //----------------------------------------------------
-    // auto contentUpdater = std::make_unique<CSiteContentUpdater>();
-    // contentUpdater->searchLine("401671866", "-", "no");
+    //Endless loop until user runs "exit" command
+    while (true)
+    {
+        //----------------------------------------------------
+        //---CMD line UI--------------------------------------
+        //----------------------------------------------------
+        auto inputValidator = std::make_unique<CInputValidator>();
+        auto input = inputValidator->readInput();
+        // set week3 5 watchOption Full
+        auto gameid = data.at(input.at(1)).m_gamesPerWeek.at(std::stoi(input.at(2)) - 1).m_gameId;
+        std::cout << gameid << std::endl;
 
-    //----------------------------------------------------
-    //---CMD line UI--------------------------------------
-    //----------------------------------------------------
-
+        //----------------------------------------------------
+        //---UPDATE SITE CONTENT------------------------------
+        //----------------------------------------------------
+        auto contentUpdater = std::make_unique<CSiteContentUpdater>();
+        if (input.at(3) == "watchoption")
+        {
+            contentUpdater->searchLine(gameid, input.at(4), "");
+        }
+        else if (input.at(3) == "seen")
+        {
+            contentUpdater->searchLine(gameid, "", input.at(4));
+        }
+    }
 
     std::cout << "\nend";
     return 0;
