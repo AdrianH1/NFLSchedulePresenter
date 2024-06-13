@@ -20,8 +20,8 @@ std::vector<std::string> CInputValidator::readInput()
     {
         std::cout << std::endl << ">>>";
         std::getline(std::cin, inputLine);
-        inputLine = lowerCase(inputLine);
         input = separateInput(&inputLine);
+        lowerCase(input);
     }
     return input;
 }
@@ -61,12 +61,16 @@ std::vector<std::string> CInputValidator::separateInput(std::string* inputLine)
 }
 
 //------------------------------------------------------------------
-std::string CInputValidator::lowerCase(std::string inputline)
+void CInputValidator::lowerCase(std::vector<std::string>& input)
 {
     std::string result = "";
-    for (char c : inputline)
+    for (auto itr = input.begin(); itr != --input.end(); itr++)
     {
-        result += std::tolower(c);
+        for (auto c : *itr)
+        {
+            result += std::tolower(c);
+        }
+        *itr = result;
+        result.clear();
     }
-    return result;
 }

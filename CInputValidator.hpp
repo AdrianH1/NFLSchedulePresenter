@@ -11,7 +11,7 @@ private:
 
     bool inputValid(std::vector<std::string>* input);
     std::vector<std::string> separateInput(std::string* inputLine);
-    std::string lowerCase(std::string inputline);
+    void lowerCase(std::vector<std::string>& inputline);
 
     std::vector<std::string> m_cmd = { "set" };
 };
