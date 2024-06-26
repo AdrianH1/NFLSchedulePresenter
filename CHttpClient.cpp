@@ -68,7 +68,6 @@ void CHttpClient::grabSomeData() {
     socket_.async_read_some(asio::buffer(vBuffer->data(), vBuffer->size()),
         [this, vBuffer](std::error_code ec, std::size_t length) {
             if (!ec) {
-                std::cout << "\n\nRead " << length << " bytes\n\n";
                 handleRead(*vBuffer, length);
             }
             else if (ec == asio::error::eof) {
@@ -134,6 +133,7 @@ void CHttpClient::saveToFile() {
         {
             std::cout << "exception in " << currentRequest_.second << std::endl;
             std::cerr << e.what() << '\n';
+            addRequest(currentRequest_.first, currentRequest_.second);
         }
 
         return;
@@ -145,9 +145,19 @@ void CHttpClient::saveToFile() {
     std::smatch match;
     if (std::regex_search(fileContent, match, jsonRegex)) {
         std::string jsonString = match.str();
-        auto json_stream = nlohmann::json::parse(jsonString);
-        finalFile << json_stream;
-        std::cout << json_stream.at("$meta") << std::endl;
+        try
+        {
+            auto json_stream = nlohmann::json::parse(jsonString);
+            finalFile << json_stream;
+            std::cout << json_stream.at("$meta") << std::endl;
+        }
+        catch (const std::exception& e)
+        {
+            std::cout << "exception in " << currentRequest_.second << std::endl;
+            std::cerr << e.what() << '\n';
+            addRequest(currentRequest_.first, currentRequest_.second);
+        }
+
     }
     else {
         std::cout << "No JSON content found in the response." << std::endl;

@@ -14,16 +14,19 @@ int main(int argc, char const* argv[]) {
     //----------------------------------------------------
     //---READ API DATA------------------------------------
     //----------------------------------------------------
-    // auto apiReader = std::make_unique<CApiDataReader>();
-    // apiReader->getAllRegularSeasonEvents();
-    // apiReader->extractEventsFromWeeks(13);
-    // apiReader->getRegularSeasonEventDetails();
+    auto apiReader = std::make_unique<CApiDataReader>();
+    apiReader->getAllRegularSeasonEvents();
+    for (int i = 1; i <= 18; i++)
+    {
+        apiReader->extractEventsFromWeeks(i);
+    }
+    apiReader->getRegularSeasonEventDetails();
 
     //----------------------------------------------------
     //---COMPILE API DATA---------------------------------
     //----------------------------------------------------
-    auto apiCompiler = std::make_unique<CApiDataCompiler>();
-    auto data = apiCompiler->compileApiData();
+    // auto apiCompiler = std::make_unique<CApiDataCompiler>();
+    // auto data = apiCompiler->compileApiData();
 
     //----------------------------------------------------
     //---CREATE SITE CONTENT------------------------------
@@ -31,7 +34,10 @@ int main(int argc, char const* argv[]) {
     // auto contentFactory = std::make_unique<CSiteContentFactory>();
     // contentFactory->saveSiteContent(data);
 
-    //Endless loop until user runs "exit" command
+/*
+    //----------------------------------------------------
+    //---APPLICATION MAIN LOOP----------------------------
+    //----------------------------------------------------
     while (true)
     {
         //----------------------------------------------------
@@ -56,6 +62,7 @@ int main(int argc, char const* argv[]) {
             contentUpdater->searchLine(gameid, "", input.at(4));
         }
     }
+*/
 
     std::cout << "\nend";
     return 0;
