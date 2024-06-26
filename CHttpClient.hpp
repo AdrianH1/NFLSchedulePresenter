@@ -20,15 +20,15 @@ private:
     void processNextRequest();
     void saveToFile();
 
-    std::string address_;
-    int port_;
-    asio::error_code ec_;
-    asio::io_context context_;
-    asio::ip::tcp::endpoint endpoint_;
-    asio::ip::tcp::socket socket_;
-    std::vector<std::string> vBuffer_Body_{ 20 * 1024 };
-    std::queue<std::pair<std::string, std::string>> requests_;
-    std::pair<std::string, std::string> currentRequest_;
-    bool headerProcessed_ = false;
-    std::string headerBuffer_;
+    std::string address;
+    int port;
+    asio::error_code ec;
+    asio::io_context context;
+    asio::ip::tcp::endpoint endpoint;
+    asio::ip::tcp::socket socket;
+    std::vector<std::string> vBufferBody{ 20 * 1024 };
+    std::queue<std::pair<std::string, std::string>> requests;
+    std::pair<std::string, std::string> currentRequest;
+    bool headerProcessed = false;
+    std::string headerBuffer;
 };

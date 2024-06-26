@@ -11,61 +11,61 @@
 
 //------------------------------------------------------------------
 CHttpClient::CHttpClient(const std::string& address, int port)
-    : address_(address), port_(port), endpoint_(asio::ip::make_address(address, ec_), port),
-    socket_(context_) {}
+    : address(address), port(port), endpoint(asio::ip::make_address(address, ec), port),
+    socket(context) {}
 
 //------------------------------------------------------------------
 void CHttpClient::start() {
-    if (!requests_.empty()) {
+    if (!requests.empty()) {
         processNextRequest();
-        context_.run();
+        context.run();
     }
 }
 
 //------------------------------------------------------------------
 void CHttpClient::addRequest(const std::string& url, const std::string& filename) {
-    requests_.emplace(url, filename);
+    requests.emplace(url, filename);
 }
 
 //------------------------------------------------------------------
 void CHttpClient::processNextRequest() {
-    if (requests_.empty()) {
+    if (requests.empty()) {
         return;
     }
 
-    currentRequest_ = requests_.front();
-    requests_.pop();
+    currentRequest = requests.front();
+    requests.pop();
 
-    vBuffer_Body_.clear();
-    headerProcessed_ = false;
-    headerBuffer_.clear();
+    vBufferBody.clear();
+    headerProcessed = false;
+    headerBuffer.clear();
 
     // Ensure the socket is closed before starting a new request
-    if (socket_.is_open()) {
-        socket_.close();
+    if (socket.is_open()) {
+        socket.close();
     }
 
-    socket_ = asio::ip::tcp::socket(context_);
-    socket_.connect(endpoint_, ec_);
+    socket = asio::ip::tcp::socket(context);
+    socket.connect(endpoint, ec);
 
-    if (!ec_) {
+    if (!ec) {
         std::string sRequest =
-            "GET " + currentRequest_.first + " HTTP/1.1\r\n"
+            "GET " + currentRequest.first + " HTTP/1.1\r\n"
             "Host: sports.core.api.espn.com\r\n"
             "Connection: close\r\n\r\n";
 
-        socket_.write_some(asio::buffer(sRequest.data(), sRequest.size()), ec_);
+        socket.write_some(asio::buffer(sRequest.data(), sRequest.size()), ec);
         grabSomeData();
     }
     else {
-        std::cout << "Failed to connect: " << ec_.message() << std::endl;
+        std::cout << "Failed to connect: " << ec.message() << std::endl;
     }
 }
 
 //------------------------------------------------------------------
 void CHttpClient::grabSomeData() {
     auto vBuffer = std::make_shared<std::vector<char>>(1024);
-    socket_.async_read_some(asio::buffer(vBuffer->data(), vBuffer->size()),
+    socket.async_read_some(asio::buffer(vBuffer->data(), vBuffer->size()),
         [this, vBuffer](std::error_code ec, std::size_t length) {
             if (!ec) {
                 handleRead(*vBuffer, length);
@@ -87,18 +87,18 @@ void CHttpClient::grabSomeData() {
 void CHttpClient::handleRead(const std::vector<char>& vBuffer, std::size_t length) {
     std::string data(vBuffer.data(), length);
 
-    if (!headerProcessed_) {
-        headerBuffer_ += data;
-        std::size_t headerEnd = headerBuffer_.find("\r\n\r\n");
+    if (!headerProcessed) {
+        headerBuffer += data;
+        std::size_t headerEnd = headerBuffer.find("\r\n\r\n");
         if (headerEnd != std::string::npos) {
-            headerProcessed_ = true;
-            std::string body = headerBuffer_.substr(headerEnd + 4);
-            vBuffer_Body_.emplace_back(body);
-            headerBuffer_ = headerBuffer_.substr(0, headerEnd);
+            headerProcessed = true;
+            std::string body = headerBuffer.substr(headerEnd + 4);
+            vBufferBody.emplace_back(body);
+            headerBuffer = headerBuffer.substr(0, headerEnd);
         }
     }
     else {
-        vBuffer_Body_.emplace_back(data);
+        vBufferBody.emplace_back(data);
     }
 
     grabSomeData();
@@ -106,20 +106,20 @@ void CHttpClient::handleRead(const std::vector<char>& vBuffer, std::size_t lengt
 
 //------------------------------------------------------------------
 void CHttpClient::saveToFile() {
-    std::ofstream tempFile(currentRequest_.second);
-    for (const auto& s : vBuffer_Body_) {
+    std::ofstream tempFile(currentRequest.second);
+    for (const auto& s : vBufferBody) {
         tempFile << s;
     }
     tempFile.close();
 
 
     // Load the file and extract the JSON content
-    std::ifstream ifs(currentRequest_.second);
+    std::ifstream ifs(currentRequest.second);
     std::stringstream buffer;
     buffer << ifs.rdbuf();
     std::string fileContent = buffer.str();
 
-    if (currentRequest_.second.find("eventDetails") != std::string::npos)
+    if (currentRequest.second.find("eventDetails") != std::string::npos)
     {
         std::size_t start = fileContent.find('{');
         std::size_t end = fileContent.rfind('}');
@@ -131,15 +131,15 @@ void CHttpClient::saveToFile() {
         }
         catch (const nlohmann::json::exception& e)
         {
-            std::cout << "exception in " << currentRequest_.second << std::endl;
+            std::cout << "exception in " << currentRequest.second << std::endl;
             std::cerr << e.what() << '\n';
-            addRequest(currentRequest_.first, currentRequest_.second);
+            addRequest(currentRequest.first, currentRequest.second);
         }
 
         return;
     }
 
-    std::ofstream finalFile(currentRequest_.second);
+    std::ofstream finalFile(currentRequest.second);
     // Extract JSON using regex (assuming JSON starts with '{' and ends with '}')
     std::regex jsonRegex(R"(\{.*\})", std::regex::extended);
     std::smatch match;
@@ -153,9 +153,9 @@ void CHttpClient::saveToFile() {
         }
         catch (const std::exception& e)
         {
-            std::cout << "exception in " << currentRequest_.second << std::endl;
+            std::cout << "exception in " << currentRequest.second << std::endl;
             std::cerr << e.what() << '\n';
-            addRequest(currentRequest_.first, currentRequest_.second);
+            addRequest(currentRequest.first, currentRequest.second);
         }
 
     }
