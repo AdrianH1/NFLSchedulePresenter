@@ -10,24 +10,11 @@ void CApiDataReader::getAllRegularSeasonEvents()
 {
     CHttpClient httpClient(KeyValues::getApiServerIp(), 80);
 
-    httpClient.addRequest(ApiUrl::getWeekOverview("1"), JsonFilePath::getWeekOverview("1"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("2"), JsonFilePath::getWeekOverview("2"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("3"), JsonFilePath::getWeekOverview("3"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("4"), JsonFilePath::getWeekOverview("4"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("5"), JsonFilePath::getWeekOverview("5"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("6"), JsonFilePath::getWeekOverview("6"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("7"), JsonFilePath::getWeekOverview("7"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("8"), JsonFilePath::getWeekOverview("8"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("9"), JsonFilePath::getWeekOverview("9"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("10"), JsonFilePath::getWeekOverview("10"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("11"), JsonFilePath::getWeekOverview("11"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("12"), JsonFilePath::getWeekOverview("12"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("13"), JsonFilePath::getWeekOverview("13"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("14"), JsonFilePath::getWeekOverview("14"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("15"), JsonFilePath::getWeekOverview("15"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("16"), JsonFilePath::getWeekOverview("16"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("17"), JsonFilePath::getWeekOverview("17"));
-    httpClient.addRequest(ApiUrl::getWeekOverview("18"), JsonFilePath::getWeekOverview("18"));
+    for (auto i = 1; i <= 18; ++i)
+    {
+        auto weekNum = std::to_string(i);
+        httpClient.addRequest(ApiUrl::getWeekOverview(weekNum), JsonFilePath::getWeekOverview(weekNum));
+    }
 
     httpClient.start();
 }
